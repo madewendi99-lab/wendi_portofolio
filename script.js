@@ -1,5 +1,105 @@
 let birdInterval;
 
+// KAMUS TERJEMAHAN (INDONESIA - ENGLISH)
+const translations = {
+    id: {
+        nav_home: "Home",
+        nav_about: "About",
+        nav_skills: "Skills & Sertifikat",
+        nav_contact: "Contact",
+        badge_grad: "Lulusan Baru",
+        hero_title: "Halo, Saya <span class=\"text-sunset\">Wendi</span>",
+        hero_desc: "Made Wendi Prayogi Putra • Lulusan baru yang tertarik pada pengembangan antarmuka web interaktif dan kreatif.",
+        btn_about: "Tentang Saya",
+        btn_contact_hero: "Hubungi Saya",
+        about_heading: "About <span>Me</span>",
+        about_text: "Hallo, saya <strong>Made Wendi Prayogi Putra</strong>, biasa dipanggil <strong>Wendi</strong>. Saya adalah seorang lulusan S1 Sistem Informasi ITB STIKOM Bali yang memiliki ketertarikan mendalam pada Web Development, perancangan sistem, serta pembuatan antarmuka pengguna yang interaktif. Dalam proses pengembangan, saya terbiasa memanfaatkan teknologi Artificial Intelligence (AI) untuk mempercepat alur kerja dan menciptakan solusi digital yang efisien.",
+        edu_heading: "Riwayat Pendidikan",
+        edu_1_title: "ITB STIKOM Bali",
+        edu_1_sub: "Pendidikan Tinggi / Kuliah",
+        edu_1_desc: "Menempuh studi perkuliahan dengan fokus pada bidang teknologi informasi dan pengembangan perangkat lunak.",
+        edu_2_title: "SMA Negeri 1 Manggis",
+        edu_2_sub: "Pendidikan Menengah Atas",
+        edu_2_desc: "Menyelesaikan pendidikan tingkat menengah atas dengan aktif di berbagai kegiatan akademik maupun ekstrakulikuler.",
+        skills_heading: "Skills & <span>Sertifikat</span>",
+        skill_1_title: "Web Development",
+        skill_1_desc: "HTML5, CSS3, JavaScript ES6+, Bootstrap 5",
+        skill_2_title: "GSAP & Motion SVG",
+        skill_2_desc: "Interactive Animations & Responsive Layouts",
+        skill_3_title: "UI/UX & Mobile Friendly",
+        skill_3_desc: "Clean interface adapted for all devices",
+        cert_heading: "Sertifikat & Penghargaan",
+        cert_lsp_title: "Sertifikat Kompetensi LSP",
+        cert_lsp_desc: "Halaman 1 & 2 (Klik gambar untuk memperbesar)",
+        cert_pm_title: "Project Management Associate",
+        cert_pm_desc: "Sertifikat Kompetensi",
+        cert_sc_title: "Supply Chain Associate",
+        cert_sc_desc: "Sertifikat Kompetensi",
+        cert_dm_title: "Digital Marketing",
+        cert_dm_desc: "Sertifikat Kompetensi",
+        cert_toefl_title: "Sertifikat TOEFL",
+        cert_toefl_desc: "Sertifikat Kemampuan Bahasa",
+        contact_heading: "Contact <span>Me</span>",
+        contact_desc: "Ingin berdiskusi, bekerja sama, atau terhubung dengan saya? Silakan hubungi melalui kontak di bawah ini:",
+        footer_text: "&copy; 2026 Made Wendi Prayogi Putra. All Rights Reserved."
+    },
+    en: {
+        nav_home: "Home",
+        nav_about: "About",
+        nav_skills: "Skills & Certificates",
+        nav_contact: "Contact",
+        badge_grad: "Fresh Graduate",
+        hero_title: "Hello, I'm <span class=\"text-sunset\">Wendi</span>",
+        hero_desc: "Made Wendi Prayogi Putra • Fresh graduate interested in interactive and creative web interface development.",
+        btn_about: "About Me",
+        btn_contact_hero: "Contact Me",
+        about_heading: "About <span>Me</span>",
+        about_text: "Hello, I am <strong>Made Wendi Prayogi Putra</strong>, commonly called <strong>Wendi</strong>. I am an Information Systems Bachelor graduate from ITB STIKOM Bali with a deep interest in Web Development, system design, and creating interactive user interfaces. In the development process, I am accustomed to utilizing Artificial Intelligence (AI) technology to accelerate workflow and create efficient digital solutions.",
+        edu_heading: "Educational History",
+        edu_1_title: "ITB STIKOM Bali",
+        edu_1_sub: "Higher Education / College",
+        edu_1_desc: "Pursuing college studies with a focus on information technology and software development.",
+        edu_2_title: "SMA Negeri 1 Manggis",
+        edu_2_sub: "Senior High School",
+        edu_2_desc: "Completed senior high school education while active in various academic and extracurricular activities.",
+        skills_heading: "Skills & <span>Certificates</span>",
+        skill_1_title: "Web Development",
+        skill_1_desc: "HTML5, CSS3, JavaScript ES6+, Bootstrap 5",
+        skill_2_title: "GSAP & Motion SVG",
+        skill_2_desc: "Interactive Animations & Responsive Layouts",
+        skill_3_title: "UI/UX & Mobile Friendly",
+        skill_3_desc: "Clean interface adapted for all devices",
+        cert_heading: "Certificates & Awards",
+        cert_lsp_title: "LSP Competency Certificate",
+        cert_lsp_desc: "Page 1 & 2 (Click image to enlarge)",
+        cert_pm_title: "Project Management Associate",
+        cert_pm_desc: "Competency Certificate",
+        cert_sc_title: "Supply Chain Associate",
+        cert_sc_desc: "Competency Certificate",
+        cert_dm_title: "Digital Marketing",
+        cert_dm_desc: "Competency Certificate",
+        cert_toefl_title: "TOEFL Certificate",
+        cert_toefl_desc: "Language Proficiency Certificate",
+        contact_heading: "Contact <span>Me</span>",
+        contact_desc: "Want to discuss, collaborate, or connect with me? Please reach out through the contacts below:",
+        footer_text: "&copy; 2026 Made Wendi Prayogi Putra. All Rights Reserved."
+    }
+};
+
+let currentLang = 'id';
+
+function toggleLanguage() {
+    currentLang = currentLang === 'id' ? 'en' : 'id';
+    document.getElementById('langText').innerText = currentLang === 'id' ? 'EN' : 'ID';
+    
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) {
+            el.innerHTML = translations[currentLang][key];
+        }
+    });
+}
+
 // 1. GENERATOR KAWANAN BURUNG
 function spawnBirdFlock(birdCount = 6) {
     const birdsContainer = document.getElementById('birdsContainer');
